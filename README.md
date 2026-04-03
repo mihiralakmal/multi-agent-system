@@ -153,7 +153,7 @@ You will see the following endpoints:
 
 ```json
 {
-  "approved": true
+  "session_id": "0790fac7-7516-47cc-91eb-aad0fc6646ec"
 }
 ```
 
@@ -161,7 +161,7 @@ You will see the following endpoints:
 
 ```json
 {
-  "final": "Final approved answer"
+  "final_answer": "Final approved answer"
 }
 ```
 
