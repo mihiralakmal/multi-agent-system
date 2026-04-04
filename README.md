@@ -9,6 +9,7 @@ This project demonstrates a **multi-agent AI system** built with a strong focus 
 * 🔹 LangGraph state-machine orchestration
 * 🔹 Hybrid RAG (Vector + Metadata filtering)
 * 🔹 Internet Search Tool (API-based)
+* 🔹 Linkedin Search 
 * 🔹 Reddit Intelligence Agent
 * 🔹 Human-in-the-loop approval checkpoint
 * 🔹 Microservices architecture (Frontend ↔ Backend)
@@ -18,26 +19,26 @@ This project demonstrates a **multi-agent AI system** built with a strong focus 
 # Architecture Diagram
 
 ```
-                            User
-                             │
-                      Frontend (Flask)
-                             │
-                      FastAPI Backend
-                             │
-                   LangGraph Orchestrator
-                             │
-         ┌───────────────────┼───────────────────┐
-         │                   │                   │
-     Planner Node      Executor Node       Verifier Node
-                             │
-             ┌───────────────┬───────────────┬
-             │               │               │
-         RAG Tool      Search Tool     Reddit Tool
-       (Vector + Meta)
-                             │
-                  Human Checkpoint Node
-                             │
-                         Final Output
+                                                      User
+                                                       │
+                                                Frontend (Flask)
+                                                       │
+                                                FastAPI Backend
+                                                       │
+                                            LangGraph Orchestrator
+                                                       │
+                                   ┌───────────────────┼───────────────────┐
+                                   │                   │                   │
+                                  Planner Node     Executor Node     Verifier Node
+                                                       │
+                                   ┌───────────────┬───────────────┬───────────────┐
+                                   │               │               │               │
+                               RAG Tool      Search Tool     Reddit Tool    LinkedIn Tool
+                             (Vector + Meta)
+                                                       │
+                                              Human Checkpoint Node
+                                                       │
+                                                  Final Output
 ```
 
 ---
@@ -78,6 +79,8 @@ EMBEDDING_MODEL=text-embedding-3-small
 SEARCH_API_KEY=your_key
 REDDIT_CLIENT_ID=your_id
 REDDIT_SECRET=your_secret
+LINKEDIN_ACCESS_TOKEN=your_token
+OPEN_API_KEY=your-key
 ```
 
 ---
@@ -126,7 +129,7 @@ You will see the following endpoints:
 
 ```json
 {
-  "query": "What do developers think about LangGraph?"
+  "query": "software engineer"
 }
 ```
 
@@ -136,9 +139,10 @@ You will see the following endpoints:
 {
   "draft": "Draft answer...",
   "trace": [
-    "Planner executed",
-    "Executor executed",
-    "Verifier executed"
+    "Planner created execution plan",
+    "Executor used LangChain tools",
+    "Verifier approved draft",
+    "Waiting for human approval"
   ]
 }
 ```
@@ -149,19 +153,22 @@ You will see the following endpoints:
 
 **POST /approve**
 
-### Request
-
-```json
-{
-  "session_id": "0790fac7-7516-47cc-91eb-aad0fc6646ec"
-}
-```
-
 ### Response
 
 ```json
 {
-  "final_answer": "Final approved answer"
+  "final": "Verified: Combined answer generated from tools",
+  "approved": true,
+  "trace": [
+    "Planner created execution plan",
+    "Executor used LangChain tools",
+    "Verifier approved draft",
+    "Waiting for human approval",
+    "Planner created execution plan",
+    "Executor used LangChain tools",
+    "Verifier approved draft",
+    "Human approved output"
+  ]
 }
 ```
 
@@ -173,10 +180,15 @@ You will see the following endpoints:
 
 Returns full execution state including:
 
-* Plan
-* Tool outputs
-* Draft
-* Final result
+* Planner created execution plan",
+* Executor used LangChain tools",
+* Verifier approved draft",
+* Waiting for human approval",
+* Planner created execution plan",
+* Executor used LangChain tools",
+* Verifier approved draft",
+* Human approved output"
+
 
 ---
 
@@ -293,10 +305,10 @@ The system provides:
 
 This project demonstrates:
 
-* ✔ Clean architecture
-* ✔ True multi-agent orchestration
-* ✔ Human-in-the-loop workflow
-* ✔ Production-ready extensible design
+* Clean architecture
+* True multi-agent orchestration
+* Human-in-the-loop workflow
+* Production-ready extensible design
 
 ---
 

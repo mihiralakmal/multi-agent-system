@@ -1,7 +1,14 @@
 fastapi
 uvicorn
-langchain
 langgraph
-requests
-pydantic
+langchain
 chromadb
+pydantic
+requests
+flask
+praw
+python-dotenv
+langchain-community
+langchain-openai
+duckduckgo-search
+
